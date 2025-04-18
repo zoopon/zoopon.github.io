@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>ResilInvaders</title>
+<style>
+  body { background:#111; display:flex; flex-direction:column; align-items:center;
+         color:#fff; font-family:sans-serif; margin:0; padding:1rem; }
+  canvas { background:#222; border:6px solid #444; border-radius:16px;
+           box-shadow:0 4px 12px rgba(0,0,0,.6); }
+  h1{margin:0 0 8px;} p{margin:8px 0 0; font-size:.9rem; color:#aaa;}
+</style>
+</head>
+<body>
+<h1>Resilinvaders</h1>
+<canvas id="game" width="640" height="640"></canvas>
+<p>Move: ◀ / ▶ or A / D   |   Shoot: SPACE</p>
+
+<script>
+/* ===== 1. 埋め込み SVG ==================================================== */
+const svgData = `<svg
+   version="1.1"
+   id="svg1"
+   width="960"
+   height="960"
+   viewBox="0 0 960 960"
+   sodipodi:docname="invader.png"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g1">
+    <image
+       width="960"
+       height="960"
+       preserveAspectRatio="none"
+       xlink:href="data:image/png;base64,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&#10;"
+       id="image1" />
+  </g>
+</svg>`;
+const img = new Image();
+img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+
+/* ===== 2. ゲーム定数 / 状態 ============================================= */
+const C = document.getElementById('game');
+const ctx = C.getContext('2d');
+const W=640,H=640,PW=48,PH=24,PS=5,BS=7,IR=4,IC=8,IS=40,IH=12,IV=16,IX=1.2,IY=20;
+const player={x:W/2-PW/2,y:H-PH-16,dx:0}; let bullets=[], invaders=[], dir=1,state='playing';
+
+/* ===== 3. 初期化 ========================================================= */
+(function initInvaders(){
+  const ox=(W-(IC*IS+(IC-1)*IH))/2;
+  for(let r=0;r<IR;r++)for(let c=0;c<IC;c++)
+    invaders.push({x:ox+c*(IS+IH),y:60+r*(IS+IV),alive:true});
+})();
+
+/* ===== 4. 入力 =========================================================== */
+addEventListener('keydown',e=>{
+  if(state!=='playing' && (e.key===' '||e.key==='Enter')) location.reload();
+  if(['ArrowLeft','a','A'].includes(e.key))  player.dx=-PS;
+  if(['ArrowRight','d','D'].includes(e.key)) player.dx= PS;
+  if(e.key===' ') bullets.push({x:player.x+PW/2-2,y:player.y});
+});
+addEventListener('keyup',e=>{ if(['ArrowLeft','ArrowRight','a','A','d','D'].includes(e.key)) player.dx=0; });
+
+/* ===== 5. ループ ========================================================= */
+function update(){
+  player.x=Math.max(0,Math.min(W-PW,player.x+player.dx));
+  bullets.forEach(b=>b.y-=BS); bullets=bullets.filter(b=>b.y>-10);
+
+  let hitEdge=false;
+  invaders.forEach(inv=>{ if(!inv.alive)return; inv.x+=IX*dir; if(inv.x<0||inv.x+IS>W) hitEdge=true;});
+  if(hitEdge){ dir*=-1; invaders.forEach(inv=>{ if(inv.alive)inv.y+=IY; if(inv.y+IS>=player.y) state='lose'; });}
+
+  bullets.forEach(b=>invaders.forEach(inv=>{
+    if(!inv.alive) return;
+    if(b.x<inv.x+IS && b.x+4>inv.x && b.y<inv.y+IS && b.y+8>inv.y){ inv.alive=false; b.y=-100; }
+  }));
+  if(invaders.every(i=>!i.alive)) state='win';
+}
+
+function draw(){
+  ctx.fillStyle='#222'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#39f'; ctx.fillRect(player.x,player.y,PW,PH);
+  ctx.fillStyle='#fff'; bullets.forEach(b=>ctx.fillRect(b.x,b.y,4,8));
+  invaders.forEach(inv=>{ if(!inv.alive)return; 
+    if(img.complete) ctx.drawImage(img,inv.x,inv.y,IS,IS);
+    else { ctx.fillStyle='#4caf50'; ctx.fillRect(inv.x,inv.y,IS,IS); }});
+  if(state!=='playing'){
+    ctx.fillStyle='rgba(0,0,0,.6)'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#fff'; ctx.textAlign='center';
+    ctx.font='48px sans-serif'; ctx.fillText(state==='win'?'You Win!':'Game Over',W/2,H/2);
+    ctx.font='24px sans-serif'; ctx.fillText('Press SPACE or ENTER to restart',W/2,H/2+40);
+  }
+}
+
+(function loop(){ if(state==='playing') update(); draw(); requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>
+
