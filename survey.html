@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSR調査票作成ページ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .nav-tab:hover {
+            background: #ecf0f1;
+        }
+
+        .nav-tab.active:hover {
+            background: #2980b9;
+        }
+
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .question-group h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+
+        .question h4 {
+            color: #34495e;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .question-text {
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .answer-options {
+            margin-bottom: 15px;
+        }
+
+        .answer-options h5 {
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .answer-options ol {
+            margin-left: 20px;
+        }
+
+        .answer-options li {
+            margin-bottom: 8px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .tag.iso26000 { background: #e74c3c; }
+        .tag.iso20400 { background: #f39c12; }
+        .tag.oecd { background: #2ecc71; }
+        .tag.business-human-rights { background: #9b59b6; }
+        .tag.csddd { background: #34495e; }
+
+        .related-questions {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .related-questions h5 {
+            color: #7f8c8d;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .related-question {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+
+        .related-question h6 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .related-question p {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .explanation {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+        }
+
+        .explanation h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .explanation-section {
+            margin-bottom: 15px;
+        }
+
+        .explanation-section h5 {
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .explanation-section p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .references {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #bdc3c7;
+        }
+
+        .references h5 {
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .references ul {
+            list-style: none;
+        }
+
+        .references li {
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 13px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .references li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .search-filter-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-option:hover {
+            background: #f0f0f0;
+        }
+
+        .filter-option.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .filter-option input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .filter-option label {
+            font-size: 14px;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .parent-theme-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .parent-theme-link:hover {
+            text-decoration: underline;
+        }
+
+        .results-count {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .tab-content > p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .filter-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .filter-option {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CSR調査票作成ページ</h1>
+            <p>企業のCSR（企業の社会的責任）に関する調査票を作成するためのページです</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('abstract')">抽象度が高い質問群</button>
+            <button class="nav-tab" onclick="switchTab('specific')">具体度が高い質問群</button>
+        </div>
+
+        <div class="content">
+            <div id="abstract-tab" class="tab-content">
+                <h2>抽象度が高い質問群</h2>
+                <p>包括的な観点から企業のCSRに関する質問を確認できます。各質問には関連する具体的な質問も表示されます。</p>
+                <div id="abstract-questions"></div>
+            </div>
+
+            <div id="specific-tab" class="tab-content hidden">
+                <h2>具体度が高い質問群</h2>
+                <p>より詳細で具体的な観点から企業のCSRに関する質問を確認できます。検索やフィルターを使って目的の質問を見つけることができます。</p>
+                
+                <div class="search-filter-section">
+                    <input type="text" id="search-input" class="search-box" placeholder="質問文やテーマで検索...">
+                    
+                    <div class="filter-options">
+                        <div class="filter-option active" onclick="toggleFilter('iso26000')">
+                            <input type="checkbox" id="iso26000" checked>
+                            <label for="iso26000">ISO26000</label>
+                        </div>
+                        <div class="filter-option active" onclick="toggleFilter('iso20400')">
+                            <input type="checkbox" id="iso20400" checked>
+                            <label for="iso20400">ISO20400</label>
+                        </div>
+                        <div class="filter-option active" onclick="toggleFilter('oecd')">
+                            <input type="checkbox" id="oecd" checked>
+                            <label for="oecd">OECDガイドライン</label>
+                        </div>
+                        <div class="filter-option active" onclick="toggleFilter('business-human-rights')">
+                            <input type="checkbox" id="business-human-rights" checked>
+                            <label for="business-human-rights">ビジネスと人権</label>
+                        </div>
+                        <div class="filter-option active" onclick="toggleFilter('csddd')">
+                            <input type="checkbox" id="csddd" checked>
+                            <label for="csddd">CSDDD</label>
+                        </div>
+                    </div>
+                    
+                    <div class="results-count" id="results-count"></div>
+                </div>
+                
+                <div id="specific-questions"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 抽象度が高い質問群のデータ
+        const abstractQuestions = [
+            {
+                theme: "1. 人権尊重方針とコミットメント",
+                question: "貴社は、国際的に認められた人権（例：世界人権宣言、ILOの労働における基本原則および権利に関する宣言）を尊重する明確な方針を有し、これを社内外に公表・浸透させていますか？また、その方針はビジネスパートナーに対する期待を明確に示していますか？",
+                options: [
+                    "はい、明確な方針を有し、国際的な人権基準を参照し、最高位で承認され、社内外に広く公開・伝達されており、ビジネスパートナーへの期待も明確に示されています。",
+                    "はい、方針はありますが、特定の国際基準への言及が限定的であるか、公開・浸透が限定的であるか、ビジネスパートナーへの期待が不明確な点があります。",
+                    "いいえ、現時点では明確な人権方針がありません。",
+                    "検討中です。"
+                ]
+            },
+            {
+                theme: "2. 人権デュー・ディリジェンスの包括的実施",
+                question: "貴社は、自身の活動およびビジネス関係によって生じる人権への負の影響を回避し、対処するために、包括的な人権デュー・ディリジェンスを継続的に実施していますか？",
+                options: [
+                    "はい、継続的かつプロアクティブにデュー・ディリジェンスを実施し、自身の活動とビジネス関係の双方をカバーし、特定された負の影響に積極的に対処しています。",
+                    "はい、一部の事業領域やサプライチェーンで実施していますが、包括的ではないか、人権に特化した積極的な措置が限定的です。",
+                    "いいえ、人権に特化したデュー・ディリジェンスは実施していません。",
+                    "検討中です。"
+                ]
+            },
+            {
+                theme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション",
+                question: "貴社は、人権影響を特定・評価し、その結果を社内プロセスに統合し、効果を継続的に追跡・監視していますか？また、外部へのデュー・ディリジェンスに関するコミュニケーションを適切に行い、リスクが高い状況での強化されたデュー・ディリジェンスを実施し、悪影響の対処における優先順位付けを行っていますか？",
+                options: [
+                    "はい、定期的に人権影響を評価し、意思決定、予算配分、監督プロセスに統合し、効果を継続的に追跡・監視しています。特に深刻なリスクがある場合は公式に報告し、リスクの高い状況では強化されたデュー・ディリジェンスを適用し、深刻度に基づいた優先順位付けを行っています。",
+                    "はい、評価や追跡は行っていますが、統合や外部コミュニケーションが限定的であるか、リスクの高い状況への対応や優先順位付けが不十分です。",
+                    "いいえ、体系的な評価、統合、追跡、外部コミュニケーション、またはリスク状況への特別な対応は行っていません。",
+                    "検討中です/把握していません。"
+                ]
+            },
+            {
+                theme: "4. 負の人権影響への対処と関係性の管理",
+                question: "貴社は、特定された潜在的または実際の負の人権影響の防止、軽減、終了、最小化のために多角的な措置を講じていますか？ また、改善が見られない場合の取引関係の解消について、人権への負の影響を考慮し責任ある方法で判断しますか？共謀の回避策も講じていますか？",
+                options: [
+                    "はい、防止行動計画の策定、契約上の保証、購買慣行の変更など具体的な措置を講じ、終了できない場合は是正行動計画を実施しています。改善が見込まれない場合の取引関係の解消も責任ある方法で検討し、共謀を避けるための明確な方針と対策を講じています。",
+                    "はい、対処はしていますが、包括的な措置や関係性解消の検討、共謀回避策が限定的です。",
+                    "いいえ、負の影響への体系的な対処や関係性管理、共謀回避策は行っていません。",
+                    "検討中です/把握していません。"
+                ]
+            },
+            {
+                theme: "5. 苦情処理と救済措置",
+                question: "貴社は、影響を受ける個人やコミュニティが利用できる、正当で効果的な苦情処理メカニズムを確立し提供していますか？ また、貴社が引き起こした、または助長した人権影響に対して、適切に救済を提供または協力しますか？",
+                options: [
+                    "はい、正当性、アクセス可能性、公平性、透明性などの原則を満たす効果的な苦情処理メカニズムを提供し、人権影響に対して正当なプロセスを通じて救済を提供または協力しています。",
+                    "はい、苦情を受け付ける窓口はありますが、上記の原則が全て満たされていないか、救済提供が限定的です。",
+                    "いいえ、効果的な苦情処理メカニズムや救済措置はありません。",
+                    "検討中です/把握していません。"
+                ]
+            },
+            {
+                theme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止",
+                question: "貴社は、デュー・ディリジェンスプロセスを通じて影響を受けるステークホルダーと有意義な対話を実施していますか？ 特に、脆弱な立場にある個人やグループの人権ニーズに特別な注意を払い、差別を行わない方針を徹底し、過去の差別是正にも貢献していますか？",
+                options: [
+                    "はい、タイムリーでアクセスしやすく、適切かつ安全な方法でステークホルダーと継続的に対話し、脆弱なグループに特別な配慮を払い、明確な差別防止方針を徹底し、過去の差別是正にも積極的に貢献しています。",
+                    "はい、対話や配慮はしていますが、体系的ではないか、すべての側面にわたる徹底が不十分です。",
+                    "いいえ、体系的な対話や脆弱なグループへの特別な配慮、差別防止の取り組みは行っていません。",
+                    "検討中です/把握していません。"
+                ]
+            },
+            {
+                theme: "7. 市民的・政治的権利と経済的・社会的・文化的権利の尊重",
+                question: "貴社は、個人の生命、意見と表現の自由、集会の自由、情報へのアクセスといった市民的・政治的権利を尊重していますか？ また、水などの必須資源へのアクセスを制限せず、教育支援などを通じて経済的・社会的・文化的権利の実現に貢献していますか？",
+                options: [
+                    "はい、市民的・政治的権利および経済的・社会的・文化的権利を尊重し、社内外でその促進に努め、懲戒処分が比例的であることを保証し、自らの主要な活動に関連する形でこれらの権利の実現に積極的に貢献しています。",
+                    "はい、尊重していますが、具体的な取り組みや貢献が限定的です。",
+                    "いいえ、これらの権利に特化した取り組みはありません。",
+                    "把握していません。"
+                ]
+            },
+            {
+                theme: "8. 労働における基本的原則と権利の尊重",
+                question: "貴社は、労働者の結社の自由と団体交渉の権利を尊重し、自社およびサプライチェーン全体で強制労働、児童労働、および雇用と職業における差別を禁止・撤廃するための措置を講じていますか？",
+                options: [
+                    "はい、労働者の結社の自由と団体交渉の権利を尊重し、明確な方針で強制労働、児童労働、および雇用と職業における差別を禁止し、サプライヤーとも協力してその撤廃に努めています。",
+                    "はい、方針はありますが、サプライチェーン全体での確認や積極的な措置が限定的です。",
+                    "いいえ、労働における特定の取り組みはありません。",
+                    "検討中です/把握していません。"
+                ]
+            },
+            {
+                theme: "9. 気候変動緩和計画の実施",
+                question: "貴社は、パリ協定に沿った地球温暖化1.5℃抑制目標と整合する気候変動緩和計画を採択し、定期的に進捗を追跡し、実行していますか？",
+                options: [
+                    "はい、スコープ1, 2, 3の温室効果ガス排出量の絶対削減目標を含む科学的根拠に基づいた計画を実行し、12ヶ月ごとに更新し進捗状況を記述しています。",
+                    "はい、気候変動対策計画はありますが、パリ協定の目標との整合性や定期的な更新・進捗記述が不十分です。",
+                    "いいえ、明確な気候変動緩和計画はありません。",
+                    "検討中です。"
+                ]
+            }
+        ];
+
+        // 具体度が高い質問群のデータ（TSVファイルから全て抽出）
+        const specificQuestions = [
+            {
+                subTheme: "1. 国際的に認められた人権の尊重",
+                question: "貴社は、国際的に認められた人権（例：世界人権宣言、ILOの労働における基本原則および権利に関する宣言）を尊重する方針を有していますか？",
+                options: [
+                    "はい、明確な方針を有し、国際的な人権基準を参照しています。",
+                    "はい、方針はありますが、特定の国際基準への言及は限定的です。",
+                    "いいえ、現時点では明確な方針はありません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "1. 人権尊重方針とコミットメント"
+            },
+            {
+                subTheme: "1. 国際的に認められた人権の尊重",
+                question: "貴社は、事業活動に関連する人権への負の影響を回避し、対処するためにどのような措置を講じていますか？",
+                options: [
+                    "人権デュー・ディリジェンスを継続的に実施し、特定された負の影響に積極的に対処しています。",
+                    "関連法令遵守に努めていますが、人権に特化した積極的な措置は限定的です。",
+                    "問題が発生した場合のみ対処しています。",
+                    "まだ何も行っていません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "2. 人権デュー・ディリジェンスの包括的実施"
+            },
+            {
+                subTheme: "2. 人権尊重への公の方針表明",
+                question: "貴社の人権尊重に関する方針コミットメントは、公に利用可能であり、組織全体に浸透していますか？",
+                options: [
+                    "はい、最高位で承認され、社内外に広く公開・伝達されています。",
+                    "はい、社内向けには伝達していますが、公にはしていません。",
+                    "いいえ、まだ公開・伝達されていません。",
+                    "方針自体がまだ策定途上です。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "1. 人権尊重方針とコミットメント"
+            },
+            {
+                subTheme: "2. 人権尊重への公の方針表明",
+                question: "貴社の人権方針は、ビジネスパートナーに対しても人権に関する期待を明確に示していますか？",
+                options: [
+                    "はい、明確に示しており、業務方針や手順にも反映されています。",
+                    "はい、示していますが、具体的な業務手順への反映は不十分です。",
+                    "いいえ、ビジネスパートナーへの期待は明確ではありません。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "1. 人権尊重方針とコミットメント"
+            },
+            {
+                subTheme: "3. 人権デュー・ディリジェンスの実施",
+                question: "貴社は、人権への負の影響を特定、防止、軽減、対処するために、包括的な人権デュー・ディリジェンスを実施していますか？",
+                options: [
+                    "はい、継続的かつプロアクティブにデュー・ディリジェンスを実施しています。",
+                    "はい、一部の事業領域やサプライチェーンで実施しています。",
+                    "いいえ、人権に特化したデュー・ディリジェンスは実施していません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "2. 人権デュー・ディリジェンスの包括的実施"
+            },
+            {
+                subTheme: "3. 人権デュー・ディリジェンスの実施",
+                question: "貴社の人権デュー・ディリジェンスは、貴社自身の活動だけでなく、ビジネス関係によって生じる負の人権影響もカバーしていますか？",
+                options: [
+                    "はい、自身の活動とビジネス関係の双方をカバーしています。",
+                    "はい、主に自身の活動をカバーしています。",
+                    "いいえ、どちらもカバーしていません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "2. 人権デュー・ディリジェンスの包括的実施"
+            },
+            {
+                subTheme: "4. 人権影響の特定と評価",
+                question: "貴社は、実際および潜在的な人権影響を特定し、評価するために定期的なアセスメントを行っていますか？",
+                options: [
+                    "はい、社内外の専門知識を活用し、定期的に評価しています（少なくとも12ヶ月ごと）。",
+                    "はい、社内で評価していますが、外部専門家の活用は限定的です。",
+                    "いいえ、定期的なアセスメントは行っていません。",
+                    "必要に応じて個別に対応しています。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "4. 人権影響の特定と評価",
+                question: "貴社の人権影響評価は、定量的および定性的な情報に基づき、独立した報告書や苦情処理手続きから収集された情報を活用していますか？",
+                options: [
+                    "はい、多様な情報源を活用し、包括的な評価を行っています。",
+                    "はい、主に社内情報源に基づいています。",
+                    "いいえ、特定の情報源に限定されています。",
+                    "評価方法を検討中です。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "5. デュー・ディリジェンス評価結果の統合と行動",
+                question: "貴社は、人権影響評価から得られた知見を、関連する社内機能やプロセスに統合していますか？",
+                options: [
+                    "はい、意思決定、予算配分、監督プロセスに統合し、責任を明確化しています。",
+                    "はい、関連部署には共有していますが、プロセスへの統合は限定的です。",
+                    "いいえ、評価結果は共有のみで、統合は行われていません。",
+                    "統合の必要性を検討中です。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "5. デュー・ディリジェンス評価結果の統合と行動",
+                question: "人権影響への対処責任は、貴社内の適切なレベルと機能に割り当てられていますか？",
+                options: [
+                    "はい、明確に割り当てられ、効果的な対応が可能な体制になっています。",
+                    "はい、割り当てられていますが、改善の余地があります。",
+                    "いいえ、明確な責任者は定められていません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "6. デュー・ディリジェンスの効果追跡と監視",
+                question: "貴社は、負の人権影響への対応が適切であるかを確認するために、その効果を継続的に追跡・監視していますか？",
+                options: [
+                    "はい、定量的・定性的指標を用い、影響を受けるステークホルダーからのフィードバックも活用しています。",
+                    "はい、主に社内指標に基づいて追跡・監視しています。",
+                    "いいえ、継続的な追跡・監視は行っていません。",
+                    "計画中です。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "6. デュー・ディリジェンスの効果追跡と監視",
+                question: "デュー・ディリジェンス義務の遵守を示す文書（行動計画、契約条項、救済措置など）を何年間保持していますか？",
+                options: [
+                    "少なくとも5年間保持しています。",
+                    "5年未満です。",
+                    "特定の保持期間は定めていません。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "7. 外部へのデュー・ディリジェンスに関するコミュニケーション",
+                question: "貴社は、人権影響への対処方法について外部にコミュニケーションを行う準備ができていますか？",
+                options: [
+                    "はい、特に深刻なリスクがある場合は公式に報告し、年次報告書でウェブサイトに公開しています。",
+                    "はい、必要に応じてコミュニケーションを行いますが、定期的な公式報告はしていません。",
+                    "いいえ、外部へのコミュニケーションは限定的です。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "7. 外部へのデュー・ディリジェンスに関するコミュニケーション",
+                question: "貴社のデュー・ディリジェンスに関する公式報告書は、企業の持つ人権影響やその対処方法に関する情報を含んでいますか？",
+                options: [
+                    "はい、十分な情報を提供し、透明性と説明責任を確保しています。",
+                    "はい、基本的な情報は含んでいますが、詳細は不足しています。",
+                    "いいえ、公式報告書は存在しません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "8. 負の人権影響の防止と軽減",
+                question: "貴社は、特定された潜在的な悪影響を防止または適切に軽減するためにどのような措置を講じていますか？",
+                options: [
+                    "防止行動計画の策定・実施、契約上の保証の取り付け、購買慣行の変更など、多角的な措置を講じています。",
+                    "主に契約上の取り決めを通じて対応しています。",
+                    "問題が発生した場合のみ、都度対応を検討しています。",
+                    "まだ具体的な措置を講じていません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "8. 負の人権影響の防止と軽減",
+                question: "貴社の購買慣行は、サプライヤーの生活賃金や所得に貢献し、悪影響を助長しないよう考慮されていますか？",
+                options: [
+                    "はい、購買方針に持続可能性の要素を統合し、積極的に貢献しています。",
+                    "はい、考慮していますが、具体的な目標や指標はありません。",
+                    "いいえ、主にコストと品質を重視しています。",
+                    "今後の課題として認識しています。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "9. 実際の負の人権影響の終了と最小化",
+                question: "貴社は、特定された実際の悪影響を終了させるためにどのような措置を講じていますか？",
+                options: [
+                    "直ちに終了できない場合は、明確な期限と指標を含む是正行動計画を策定・実施しています。",
+                    "問題の解決に向けて努力していますが、具体的な計画はまだありません。",
+                    "問題の終了はビジネスパートナーに任せています。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "9. 実際の負の人権影響の終了と最小化",
+                question: "貴社は、実際の悪影響を中和またはその範囲を最小限に抑えるために、サプライヤーである中小企業（SME）に対し、どのような支援を提供していますか？",
+                options: [
+                    "能力構築、トレーニング、財務支援など、具体的かつ比例的な支援を提供しています。",
+                    "必要に応じて一般的な助言を提供しています。",
+                    "特に支援は提供していません。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "10. 取引関係の継続・解消の検討（最後の手段としての解消）",
+                question: "潜在的または実際の悪影響を防止・軽減・終了・最小化できない場合、貴社は取引関係の停止や終了を検討しますか？",
+                options: [
+                    "はい、改善が見込まれない場合や影響が深刻な場合は、最後の手段として責任ある方法で検討します。",
+                    "はい、検討しますが、具体的な手順や方針はありません。",
+                    "いいえ、取引関係の終了は基本的に避けています。",
+                    "検討したことはありません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "10. 取引関係の継続・解消の検討（最後の手段としての解消）",
+                question: "取引関係を解消する際、貴社はどのような考慮事項に基づいて行動を決定しますか？",
+                options: [
+                    "当該主体へのレバレッジ、侵害の深刻度、解消が人権に与える負の影響などを考慮し、責任ある方法で実施します。",
+                    "主にビジネス上のリスクと法的な側面を考慮します。",
+                    "特定の考慮事項はありません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "11. 人権リスク状況への対応と優先順位付け",
+                question: "貴社は、紛争地域や政治的不安定な地域など、人権侵害のリスクが高まる特定の状況や環境において、強化されたデュー・ディリジェンスプロセスを適用していますか？",
+                options: [
+                    "はい、独立した人権影響評価など、強化されたデュー・ディリジェンスを実施しています。",
+                    "はい、通常よりも注意を払いますが、特別なプロセスは定めていません。",
+                    "いいえ、特定の状況に応じた対応はしていません。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "11. 人権リスク状況への対応と優先順位付け",
+                question: "貴社は、特定された悪影響の対処において、どのような基準で優先順位を決定していますか？",
+                options: [
+                    "悪影響の深刻度（規模、範囲、不可逆性）と発生可能性に基づいて優先順位を付けています。",
+                    "主にビジネスへの影響に基づいて優先順位を決定しています。",
+                    "特定の優先順位付けの基準はありません。",
+                    "発生した順に対応しています。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "3. 人権影響の評価、統合、追跡、およびコミュニケーション"
+            },
+            {
+                subTheme: "12. 共謀の回避",
+                question: "貴社は、人権に負の影響を与える他組織の不正行為に共謀することを避けるための明確な方針と措置を有していますか？",
+                options: [
+                    "はい、直接的、有益な、沈黙の共謀のいずれも避けるための対策を講じています。",
+                    "はい、方針はありますが、具体的な対策は限定的です。",
+                    "いいえ、特定の共謀回避の方針はありません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 0, businessHumanRights: 0, csddd: 0 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "12. 共謀の回避",
+                question: "貴社は、人権侵害を行うエンティティとの提携や契約関係を結ばないようにしていますか？",
+                options: [
+                    "はい、そのようなエンティティとの関係は避けています。",
+                    "はい、ただし、ビジネス上の必要性がある場合は例外を設けることがあります。",
+                    "いいえ、特定の制限はありません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 0 },
+                parentTheme: "4. 負の人権影響への対処と関係性の管理"
+            },
+            {
+                subTheme: "13. 効果的な苦情処理メカニズムの確立と提供",
+                question: "貴社は、影響を受ける可能性のある個人やコミュニティが懸念を表明し、救済を求めることができるよう、効果的な苦情処理メカニズムを設置または提供していますか？",
+                options: [
+                    "はい、正当性、アクセス可能性、予測可能性、公平性、透明性、権利適合性などの原則を満たすメカニズムを提供しています。",
+                    "はい、苦情を受け付ける窓口はありますが、上記の原則が全て満たされているわけではありません。",
+                    "いいえ、人権に特化した苦情処理メカニズムはありません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "5. 苦情処理と救済措置"
+            },
+            {
+                subTheme: "13. 効果的な苦情処理メカニズムの確立と提供",
+                question: "貴社の苦情処理メカニズムは、苦情提出者の身元の機密性を確保するための措置を講じていますか？",
+                options: [
+                    "はい、機密性を保護するための明確な手順と方針があります。",
+                    "はい、可能な限り機密性を保護しています。",
+                    "いいえ、特に措置は講じていません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "5. 苦情処理と救済措置"
+            },
+            {
+                subTheme: "14. 救済措置の提供または協力",
+                question: "貴社が負の人権影響を引き起こした、または助長したことを特定した場合、貴社はその救済を提供するか、救済に協力しますか？",
+                options: [
+                    "はい、正当なプロセスを通じて救済を提供または協力し、必要に応じて金銭的または非金銭的な補償を含みます。",
+                    "はい、解決に向けて努力しますが、救済の具体的な形態は定めていません。",
+                    "いいえ、救済措置の提供は行っていません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "5. 苦情処理と救済措置"
+            },
+            {
+                subTheme: "14. 救済措置の提供または協力",
+                question: "悪影響がビジネスパートナーによってのみ引き起こされた場合でも、貴社は救済を可能にするために影響力を行使する、または自発的に救済措置を提供することを検討しますか？",
+                options: [
+                    "はい、ビジネスパートナーに影響力を行使するか、自発的な救済提供を検討します。",
+                    "はい、ビジネスパートナーに働きかけますが、自発的な救済提供は限定的です。",
+                    "いいえ、ビジネスパートナーの責任範囲と考えています。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "5. 苦情処理と救済措置"
+            },
+            {
+                subTheme: "15. ステークホルダーとの有意義な対話と協議",
+                question: "貴社は、人権デュー・ディリジェンスプロセス全体を通じて、影響を受ける可能性のあるステークホルダーと有意義な対話と協議を実施していますか？",
+                options: [
+                    "はい、タイムリーでアクセスしやすく、適切かつ安全な方法で協議を実施しています。",
+                    "はい、一部のステークホルダーとは対話していますが、継続的ではありません。",
+                    "いいえ、体系的な対話や協議は行っていません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止"
+            },
+            {
+                subTheme: "15. ステークホルダーとの有意義な対話と協議",
+                question: "貴社は、協議において脆弱または疎外された立場にあるステークホルダー（例：先住民族、移民労働者、子ども、障害者）のニーズに特別な注意を払っていますか？",
+                options: [
+                    "はい、潜在的な障壁を特定し、彼らとのエンゲージメントに対する特別な配慮を行っています。",
+                    "はい、注意を払いますが、特別な配慮は限定的です。",
+                    "いいえ、特別な配慮は行っていません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止"
+            },
+            {
+                subTheme: "16. 差別を行わないこと",
+                question: "貴社は、従業員、パートナー、顧客、ステークホルダー、その他関係者に対し、直接的または間接的な差別を行わないという方針を有していますか？",
+                options: [
+                    "はい、明確な方針を有し、その遵守を徹底しています。",
+                    "はい、方針はありますが、すべての関係者に対して十分に浸透しているとは限りません。",
+                    "いいえ、特定の差別防止方針はありません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 0, businessHumanRights: 1, csddd: 0 },
+                parentTheme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止"
+            },
+            {
+                subTheme: "16. 差別を行わないこと",
+                question: "貴社の調達は、労働者、地域社会、先住民族、女性や少女、障害者、その他脆弱なグループに対する差別を含まないことをサプライヤーと連携して確認していますか？",
+                options: [
+                    "はい、サプライヤーとの連携を通じて、差別がないことを積極的に確認しています。",
+                    "はい、確認していますが、具体的な連携は限定的です。",
+                    "いいえ、調達における差別防止に特化した確認は行っていません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 1, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止"
+            },
+            {
+                subTheme: "17. 脆弱な個人・グループへの特別な配慮",
+                question: "貴社は、脆弱な立場にある個人やグループ（例：女性、子ども、障害者、先住民族、移民労働者）の人権に対する特定の影響に特別な注意を払っていますか？",
+                options: [
+                    "はい、デュー・ディリジェンスプロセスにおいて、彼らの特定のニーズとリスクを考慮し、対応しています。",
+                    "はい、注意を払いますが、具体的な配慮は限定的です。",
+                    "いいえ、特別な配慮は行っていません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 1, businessHumanRights: 1, csddd: 1 },
+                parentTheme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止"
+            },
+            {
+                subTheme: "17. 脆弱な個人・グループへの特別な配慮",
+                question: "貴社は、可能であれば、過去の差別の是正に貢献するような活動（例：歴史的に差別されたグループ出身者が運営する組織との取引、教育支援）を行っていますか？",
+                options: [
+                    "はい、積極的に貢献する機会を探し、実行しています。",
+                    "はい、検討はしていますが、具体的な行動には至っていません。",
+                    "いいえ、そのような活動は行っていません。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 0 },
+                parentTheme: "6. ステークホルダー対話と脆弱なグループへの配慮・差別禁止"
+            },
+            {
+                subTheme: "18. 市民的および政治的権利の尊重",
+                question: "貴社は、個人の生命、意見と表現の自由、平和的集会と結社の自由、情報を求める自由といった市民的および政治的権利を尊重していますか？",
+                options: [
+                    "はい、これらの権利を尊重し、社内外でその促進に努めています。",
+                    "はい、尊重していますが、特定の取り組みは限定的です。",
+                    "いいえ、特定の取り組みはありません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 1, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "7. 市民的・政治的権利と経済的・社会的・文化的権利の尊重"
+            },
+            {
+                subTheme: "18. 市民的および政治的権利の尊重",
+                question: "貴社は、懲戒処分が比例的であり、身体的な罰や非人道的な扱いを含まないことを保証していますか？",
+                options: [
+                    "はい、懲戒処分に関する明確な方針と手順があり、その遵守を徹底しています。",
+                    "はい、保証していますが、厳格な監査は行っていません。",
+                    "いいえ、特定の保証はありません。",
+                    "該当しない。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "7. 市民的・政治的権利と経済的・社会的・文化的権利の尊重"
+            },
+            {
+                subTheme: "19. 経済的、社会的、文化的権利の尊重",
+                question: "貴社は、水などの必須の製品や資源へのアクセスを直接的または間接的に制限したり、否定したりしていませんか？",
+                options: [
+                    "いいえ、そのような制限や否定は行わず、必要に応じて効率的な供給を確保する方針を持っています。",
+                    "いいえ、特定の制限はありませんが、積極的な関与もありません。",
+                    "はい、事業活動によっては制限が生じる場合があります。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 1, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "7. 市民的・政治的権利と経済的・社会的・文化的権利の尊重"
+            },
+            {
+                subTheme: "19. 経済的、社会的、文化的権利の尊重",
+                question: "貴社は、地域社会のメンバーへの教育や生涯学習のアクセスを促進するなど、経済的、社会的、文化的権利の実現に貢献する活動を行っていますか？",
+                options: [
+                    "はい、自らの主要な活動に関連する形で、これらの権利の実現に積極的に貢献しています。",
+                    "はい、一部の活動を通じて貢献していますが、体系的ではありません。",
+                    "いいえ、特に貢献する活動は行っていません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 1, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "7. 市民的・政治的権利と経済的・社会的・文化的権利の尊重"
+            },
+            {
+                subTheme: "20. 労働における基本的原則と権利の確保と尊重",
+                question: "貴社は、労働者の結社の自由と団体交渉の権利を尊重していますか？",
+                options: [
+                    "はい、労働者と雇用者が自由に組織を結成・加入する権利を尊重し、団体交渉の目的で代表組織を認識しています。",
+                    "はい、尊重していますが、団体交渉は限定的です。",
+                    "いいえ、特定の取り組みはありません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 1, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "8. 労働における基本的原則と権利の尊重"
+            },
+            {
+                subTheme: "20. 労働における基本的原則と権利の確保と尊重",
+                question: "貴社は、自社およびサプライチェーン全体で強制労働と児童労働を禁止していますか？",
+                options: [
+                    "はい、明確な方針で禁止し、サプライヤーとも協力して徹底しています。",
+                    "はい、方針はありますが、サプライチェーン全体での確認は限定的です。",
+                    "いいえ、特定の禁止方針はありません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 1, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "8. 労働における基本的原則と権利の尊重"
+            },
+            {
+                subTheme: "20. 労働における基本的原則と権利の確保と尊重",
+                question: "貴社は、雇用と職業における差別（人種、性別、国籍などに基づくもの）を撤廃するための措置を講じていますか？",
+                options: [
+                    "はい、雇用方針において差別を禁止し、職場での嫌がらせ防止や脆弱なグループの保護に努めています。",
+                    "はい、差別防止方針はありますが、積極的な措置は限定的です。",
+                    "いいえ、特定の取り組みはありません。",
+                    "把握していません。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 1, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "8. 労働における基本的原則と権利の尊重"
+            },
+            {
+                subTheme: "21. 気候変動緩和計画の採択と実施",
+                question: "貴社は、パリ協定に沿った地球温暖化1.5℃抑制目標と整合する気候変動緩和計画を採択し、実行していますか？",
+                options: [
+                    "はい、スコープ1, 2, 3の温室効果ガス排出量の絶対削減目標を含む、科学的根拠に基づいた計画を実行しています。",
+                    "はい、気候変動対策計画はありますが、パリ協定の目標との整合性は検討中です。",
+                    "いいえ、明確な気候変動緩和計画はありません。",
+                    "検討中です。"
+                ],
+                standards: { iso26000: 1, iso20400: 0, oecd: 1, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "9. 気候変動緩和計画の実施"
+            },
+            {
+                subTheme: "21. 気候変動緩和計画の採択と実施",
+                question: "貴社の気候変動緩和計画は、どのくらいの頻度で更新され、目標達成に向けた進捗状況が記述されていますか？",
+                options: [
+                    "12ヶ月ごとに更新し、進捗状況を記述しています。",
+                    "定期的に見直していますが、12ヶ月ごとではありません。",
+                    "不定期に更新しています。",
+                    "更新していません。"
+                ],
+                standards: { iso26000: 0, iso20400: 0, oecd: 0, businessHumanRights: 0, csddd: 1 },
+                parentTheme: "9. 気候変動緩和計画の実施"
+            }
+        ];
+
+        // 子テーマの説明データ（TSVファイルから全て抽出）
+        const explanations = [
+            {
+                subTheme: "1. 国際的に認められた人権の尊重",
+                brief: "企業は、その意思決定と活動が社会および環境に与える影響に対する責任として、国際的に認められた人権を尊重することが求められます。",
+                detailed: "組織は国際的に認められた人権を尊重し、可能な限り促進すべきです。これらの権利が普遍的であることを認識すべきです。人権が保護されていない状況では、人権を尊重するための措置を講じ、その状況を利用しないようにすべきです。法律やその実施が人権の適切な保護を提供しない場合でも、国際的な行動規範を最大限尊重すべきです。これは、自社の活動を通じて他者の人権を侵害することを避け、関与するあらゆる負の人権影響に対処することを意味します。企業は、事業活動に関連する人権への負の影響を回避し、対処することが求められます。",
+                background: "ほとんどの人権法は国家と個人の関係に言及していますが、非国家組織が個人の人権に影響を与える可能性があり、したがって人権を尊重する責任があると広く認識されています。国家が保護義務を果たせない場合でも、組織は人権を尊重する責任を果たすために特に警戒すべきです。人権は基本的で、固有で、譲渡不能で、普遍的で、不可分かつ相互依存的であると認識されています。",
+                references: [
+                    "ISO26000: 1, 2, 7, 13, 60, 61, 62",
+                    "ビジネスと人権: 3, 4, 9, 10, 43, 50",
+                    "OECDガイドライン: 1, 3, 23, 24, 25, 26, 27",
+                    "ISO20400: 2, 3",
+                    "CSDDD: 57, 106(a)"
+                ]
+            },
+            {
+                subTheme: "2. 人権尊重への公の方針表明",
+                brief: "企業は、人権を尊重する責任を果たすための基礎として、公に利用可能な方針コミットメントを策定し、組織全体に浸透させるべきです。",
+                detailed: "この方針は、企業の最高位で承認されていることが求められます。関連する社内および／または社外の専門知識に基づいているべきです。企業の人員、ビジネスパートナー、および事業、製品、サービスに直接関連するその他の関係者に対する人権に関する期待を明示していることが必要です。また、一般に公開され、すべての関係者（社内外の人員、ビジネスパートナー、その他の関連する関係者）に社内外で伝達されていることが重要です。",
+                background: "方針表明は、企業が人権尊重をコミットしていることを明確に示し、デューディリジェンスプロセスを統合するための基礎となります。これにより、企業は自身の人権尊重の姿勢を内外に伝え、行動の指針とすることができます。",
+                references: [
+                    "ビジネスと人権: 5, 6, 11, 12, 13",
+                    "OECDガイドライン: 2, 11, 12",
+                    "CSDDD: 19(1), 41, 146(a), 154, 155(a), 155(b), 156(c)"
+                ]
+            },
+            {
+                subTheme: "3. 人権デュー・ディリジェンスの実施",
+                brief: "企業は、人権への負の影響を特定し、防止し、軽減し、対処状況を説明するために、包括的かつプロアクティブな人権デュー・ディリジェンスを実施すべきです。",
+                detailed: "デュー・ディリジェンスは、企業の活動または関係を持つ活動から生じる、実際的または潜在的な人権への影響を特定、防止、対処するために行使する責任です。このプロセスは、組織の規模と状況に応じて、方針策定、評価手段、統合手段、パフォーマンス追跡手段、負の影響に対処する行動を含むべきです。企業自身の活動によって引き起こされる、または助長される負の人権影響、またはビジネス関係によって事業、製品、サービスに直接関連する負の人権影響をカバーすべきです。",
+                background: "デュー・ディリジェンスは、企業が人権を尊重する責任を果たすための不可欠なプロセスです。これにより、企業は潜在的な負の影響を事前に特定し、それらを防止または軽減するための措置を講じることができます。また、企業は人権に対する負の影響に対処するためにデューディリジェンスプロセスを実行し、それについて説明責任を負うべきです。",
+                references: [
+                    "ISO26000: 3, 4, 14, 15, 16, 17",
+                    "ビジネスと人権: 5, 7, 14, 15",
+                    "OECDガイドライン: 2, 12, 13, 14",
+                    "ISO20400: 3, 4, 10, 11"
+                ]
+            },
+            {
+                subTheme: "4. 人権影響の特定と評価",
+                brief: "企業は、自社および事業関係から生じる実際および潜在的な悪影響を特定し、評価するために適切な措置を講じなければなりません。",
+                detailed: "デュー・ディリジェンスプロセスには、実際の人権影響および潜在的な人権影響の評価が含まれるべきです。社内および／または独立した外部の人権専門知識を活用すべきです。悪影響が最も発生しやすく、最も深刻である可能性のある一般的な領域を特定するために、自社、子会社、および活動連鎖内のビジネスパートナーの事業をマッピングし、その結果に基づいて詳細な評価を実施するべきです。",
+                background: "負の影響の特定と評価は、企業が人権リスクを理解し、効果的な防止策と軽減策を講じるための最初のステップです。これにより、企業は潜在的な問題を早期に発見し、より深刻な影響を回避できます。",
+                references: [
+                    "ビジネスと人権: 7, 17, 19",
+                    "OECDガイドライン: 12",
+                    "CSDDD: 8, 9, 10, 12, 44, 158(a), 158(b)"
+                ]
+            },
+            {
+                subTheme: "5. デュー・ディリジェンス評価結果の統合と行動",
+                brief: "人権影響評価から得られた知見を、関連する社内機能やプロセスに統合し、負の影響への対処責任を明確にして効果的な対応を可能にすべきです。",
+                detailed: "評価結果を統合し、それに基づく行動をとるべきです。効果的な統合のためには、影響への対処責任が、企業内の適切なレベルと機能に割り当てられていること、内部の意思決定、予算配分、および監督プロセスが、影響への効果的な対応を可能にすることが重要です。これにより、企業はデューデリジェンスをすべての関連するポリシーとリスク管理システムに組み込むことができます。",
+                background: "評価結果を組織の意思決定プロセスに統合することで、人権尊重がビジネスの中核に組み込まれ、単なる形式的な活動に終わらないようにすることができます。これは、デューデリジェンスが企業活動全体に反映されるために不可欠です。",
+                references: [
+                    "ビジネスと人権: 7, 20, 21",
+                    "OECDガイドライン: 12",
+                    "CSDDD: 4, 19(1), 41, 146(a), 154"
+                ]
+            },
+            {
+                subTheme: "6. デュー・ディリジェンスの効果追跡と監視",
+                brief: "企業は、負の人権影響が適切に対処されているかを確認するために、対応の効果を継続的に追跡・監視すべきです。",
+                detailed: "デュー・ディリジェンスプロセスの要素として、対応の追跡を行うべきです。これは適切な定量的および定性的指標に基づくべきです。社内および社外の双方のフィードバック（影響を受けるステークホルダーからのフィードバックを含む）を活用すべきです。既存の報告プロセスに統合し、パフォーマンス契約、レビュー、調査、監査などのツールを使用すべきです。",
+                background: "追跡と監視は、企業が講じた措置が実際に効果を発揮しているかを確認し、必要に応じてアプローチを調整するために不可欠です。これにより、人権デューディリジェンスの有効性を高め、継続的な改善を促進することができます。",
+                references: [
+                    "ビジネスと人権: 7, 26, 27",
+                    "OECDガイドライン: 12",
+                    "CSDDD: 12, 48, 49"
+                ]
+            },
+            {
+                subTheme: "7. 外部へのデュー・ディリジェンスに関するコミュニケーション",
+                brief: "企業は、人権影響への対処方法を外部にコミュニケーションする準備ができていなければならず、特に深刻なリスクがある場合は公式に報告すべきです。",
+                detailed: "デュー・ディリジェンスプロセスの要素として、影響への対処方法のコミュニケーションを行うべきです。特に、影響を受けるステークホルダーから、または彼らを代表して懸念が提起された場合、外部にコミュニケーションする準備ができていなければなりません。事業の性質や事業環境が深刻な人権影響のリスクをもたらす企業は、それらにどのように対処しているかを公式に報告すべきです。",
+                background: "外部へのコミュニケーションは、企業の透明性と説明責任を確保するために不可欠です。これにより、ステークホルダーは企業の取り組みを評価し、信頼を築くことができます。",
+                references: [
+                    "ビジネスと人権: 7, 28, 29, 30",
+                    "OECDガイドライン: 12",
+                    "CSDDD: 50, 51, 52"
+                ]
+            },
+            {
+                subTheme: "8. 負の人権影響の防止と軽減",
+                brief: "企業は、特定された潜在的な悪影響を防止または適切に軽減するために適切な措置を講じなければなりません。",
+                detailed: "企業が負の影響を引き起こすか、または引き起こす可能性がある場合は、その影響を停止または防止するために必要な措置を講じるべきです。企業が負の人権影響に貢献しているか、または貢献する可能性がある場合は、その貢献を停止または防止するために必要な措置を講じ、残りの影響を可能な限り最大限に軽減するためにレバレッジを行使すべきです。",
+                background: "予防と軽減は、人権侵害の発生を防ぎ、その影響を最小限に抑える上で最も効果的なアプローチです。サプライチェーンを含む調達方針と慣行に持続可能性を統合することにより、組織は持続可能な環境的、社会的、経済的発展のためのリスクを管理できます。",
+                references: [
+                    "ビジネスと人権: 22, 23, 24",
+                    "OECDガイドライン: 1, 3, 4, 5, 6, 7",
+                    "ISO20400: 4",
+                    "CSDDD: 13, 14, 15, 16, 17, 18, 48, 49, 50, 52, 60, 163(a), 164(b), 164(c), 165(d), 165(e), 166(f)"
+                ]
+            },
+            {
+                subTheme: "9. 実際の負の人権影響の終了と最小化",
+                brief: "企業は、特定された実際の悪影響を終了させるために適切な措置を講じ、直ちに終了できない場合はその範囲を最小限に抑える必要があります。",
+                detailed: "企業は、悪影響を中和またはその範囲を最小限に抑えるための措置を講じなければなりません。直ちに終了できない場合は、合理的で明確に定義された期限と改善指標を含む是正行動計画を遅滞なく策定し実施すべきです。契約上の保証（行動規範および是正行動計画の遵守）を直接的なビジネスパートナーから取り付けること、設備、生産、その他の運用プロセス、インフラストラクチャへの必要な財務的または非財務的な投資、調整、または改善を行うことなどが含まれます。",
+                background: "実際の悪影響に対処し、その影響を終了または最小化することは、企業の人権尊重責任の重要な側面です。これにより、被害を回復し、将来の同様の事態を防ぐための教訓を得ることができます。",
+                references: [
+                    "ISO20400: 11",
+                    "CSDDD: 25, 26, 27, 28, 29, 30, 31, 59, 60, 175(a), 176(b), 177(c), 177(d), 178(e), 178(f), 179(g), 179(h)"
+                ]
+            },
+            {
+                subTheme: "10. 取引関係の継続・解消の検討（最後の手段としての解消）",
+                brief: "潜在的または実際の悪影響を防止・軽減・終了・最小化できない場合、企業は取引関係の停止や終了を最終手段として検討すべきですが、その際にも責任ある方法で行うべきです。",
+                detailed: "企業が負の人権影響に貢献していないが、その影響がビジネス関係によって事業、製品、サービスに直接関連している場合、状況はより複雑です。この場合、企業は当該主体へのレバレッジ、その関係が企業にとってどれほど重要か、侵害の深刻度、および当該主体との関係を終了することが人権に負の影響を与えるかどうかを考慮して適切な行動を決定すべきです。",
+                background: "事業関係を通じた人権侵害に企業が間接的に関与する可能性があるため、企業は自らの影響力を行使する責任があります。関係の解消は最後の手段ですが、それは企業のコミットメントを示すものであり、適切なデューディリジェンスとステークホルダーとの協議を通じて、負の影響を最小限に抑えつつ行われるべきです。",
+                references: [
+                    "ビジネスと人権: 23, 24, 25",
+                    "OECDガイドライン: 6, 7, 9, 10, 41",
+                    "CSDDD: 19, 20, 23, 24, 30, 32, 34"
+                ]
+            },
+            {
+                subTheme: "11. 人権リスク状況への対応と優先順位付け",
+                brief: "企業は、人権侵害のリスクが高まる特定の状況や環境において特に注意を払い、特定された悪影響の深刻度と発生可能性に基づいて、対処の優先順位を決定すべきです。",
+                detailed: "人権侵害のリスクが高まる特定の状況や環境（紛争地域、政治的不安定、貧困、汚職文化、複雑なバリューチェーン、先住民族の近隣など）において、特に注意を払うべきです。これらの状況では、人権を尊重するために強化されたデューディリジェンスプロセス（例：独立した人権影響評価）が必要となる場合があります。",
+                background: "リスクが高い状況では、人権侵害が発生する可能性が高まるため、企業はより強化された注意とデューディリジェンスが必要です。また、限られた資源の中で最大の効果を上げるためには、悪影響の優先順位付けが不可欠です。",
+                references: [
+                    "ISO26000: 18, 19, 20",
+                    "ビジネスと人権: 14, 16, 46",
+                    "OECDガイドライン: 8, 15, 28, 29, 30",
+                    "ISO20400: 12",
+                    "CSDDD: 11, 44, 46, 142(v), 160(1), 160(2), 161(3), 208(d)"
+                ]
+            },
+            {
+                subTheme: "12. 共謀の回避",
+                brief: "企業は、人権に負の影響を与える他組織の不正行為に共謀するのを避けるべきです。",
+                detailed: "人権侵害への共謀を避けるべきです。これには、人権侵害を故意に支援する直接的な共謀、他者が行った人権侵害から直接利益を得る有益な共謀、組織的な人権侵害について適切な当局に問題を提起しない沈黙の共謀が含まれます。セキュリティ体制が人権を尊重し、法執行に関する国際規範と基準に合致していることを確認すべきです。",
+                background: "企業は自らの事業活動を通じて直接人権侵害を引き起こすだけでなく、他者の人権侵害に意図せず加担してしまう可能性があります。共謀を避けることは、企業の責任ある行動の基本的な要素です。",
+                references: [
+                    "ISO26000: 5, 21, 22, 23, 24, 25, 26, 27, 49",
+                    "ISO20400: 5, 6"
+                ]
+            },
+            {
+                subTheme: "13. 効果的な苦情処理メカニズムの確立と提供",
+                brief: "企業は、人権が侵害されたと考える者が組織に報告し、救済を求めることができるよう、効果的で透明な苦情処理メカニズムを確立または提供すべきです。",
+                detailed: "組織は、影響を受けたステークホルダーが懸念を表明し、救済を求めることができるよう、効果的な苦情処理メカニズムを確立することが重要です。このメカニズムは、既存の法的経路へのアクセスを妨げないようにすべきです。有効なメカニズムは正当性、アクセス可能性、予測可能性、公平性、透明性、権利適合性などの原則を満たすべきです。",
+                background: "効果的な苦情処理メカニズムは、人権侵害の早期解決を可能にし、影響を受けた人々が救済を求めるためのアクセスを提供します。これにより、企業はデューディリジェンスプロセスを強化し、信頼を築き、評判リスクを軽減できます。",
+                references: [
+                    "ISO26000: 8, 28, 29, 30",
+                    "ビジネスと人権: 8, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 50",
+                    "OECDガイドライン: 2, 18, 19, 20",
+                    "ISO20400: 6, 13, 14, 15, 16",
+                    "CSDDD: 12, 41, 42, 43, 44, 46, 47, 191"
+                ]
+            },
+            {
+                subTheme: "14. 救済措置の提供または協力",
+                brief: "企業は、自らが負の人権影響を引き起こした、または共同で引き起こしたことを特定した場合、正当なプロセスを通じてその救済を提供するか、救済に協力すべきです。",
+                detailed: "企業が負の人権影響を引き起こした、または助長したことを特定した場合、正当なプロセスを通じてその救済を提供するか、または救済に協力すべきです。企業単独で、または他のアクターと協力して、救済に積極的に関与すべきです。救済とは、実際に悪影響が発生しなかった場合と同等またはそれに近い状況に、影響を受けた個人、コミュニティ、または環境を回復させることを意味します。",
+                background: "救済措置は、人権侵害の犠牲者の権利を回復し、負の影響を是正するための重要な手段です。これは、企業がその責任を果たす上で不可欠な要素であり、国連の「保護、尊重及び救済」枠組みの第三の柱でもあります。",
+                references: [
+                    "ビジネスと人権: 8, 50",
+                    "OECDガイドライン: 2, 18",
+                    "CSDDD: 58, 63, 141(t), 186(1), 186(2)"
+                ]
+            },
+            {
+                subTheme: "15. ステークホルダーとの有意義な対話と協議",
+                brief: "企業は、人権デュー・ディリジェンスプロセス全体を通じて、影響を受ける可能性のあるグループやその他の関連するステークホルダーと有意義な対話と協議を実施すべきです。",
+                detailed: "デュー・ディリジェンスプロセスは、影響を受ける可能性のあるグループやその他の関連するステークホルダーとの有意義な協議（企業の規模と事業の性質・状況に応じたもの）を含むべきです。これは、特定の状況下で特定の人々に与える具体的な影響を理解することを目的とします。意味のあるステークホルダーエンゲージメントは、タイムリーで、アクセスしやすく、適切で、ステークホルダーにとって安全であることを意味します。",
+                background: "ステークホルダーエンゲージメントは、企業が人権リスクを正確に特定し、影響を受けた人々の視点を理解し、効果的な解決策を策定するために不可欠です。これにより、企業はより包括的で適切なデューディリジェンスを実施し、社会からの信頼を得ることができます。",
+                references: [
+                    "ISO26000: 17",
+                    "ビジネスと人権: 17, 18",
+                    "OECDガイドライン: 15, 16, 17",
+                    "CSDDD: 37, 38, 39, 40, 70, 139(n), 187(1), 187(2), 188(a)-(d), 189(e), 190(5)"
+                ]
+            },
+            {
+                subTheme: "16. 差別を行わないこと",
+                brief: "企業は、従業員、パートナー、顧客、ステークホルダー、その他組織が関係する者に対して直接的または間接的な差別を行わないようにすべきです。",
+                detailed: "企業は、自らの事業および影響の範囲内の他者の事業を調査し、差別が存在しないか確認すべきです。差別的行為に貢献しないようにすべきです。もし貢献している場合は、他者に差別防止を促し、成功しない場合はその組織との関係を再考すべきです。財やサービスの調達が、労働者、地域社会、先住民族、女性や少女、障害者、その他脆弱なグループに対する差別を含まないことをサプライヤーと連携して確認すべきです。",
+                background: "差別は人権の基本的な原則に反する行為であり、社会的公正と平等な機会を阻害します。企業は、多様性を前向きに捉え、多角的な人的資源と関係の完全な発展から得られる自組織の利益も考慮すべきです。",
+                references: [
+                    "ISO26000: 9, 31, 33",
+                    "OECDガイドライン: 1",
+                    "ISO20400: 7"
+                ]
+            },
+            {
+                subTheme: "17. 脆弱な個人・グループへの特別な配慮",
+                brief: "企業は、脆弱な立場にある、または疎外される可能性のある個人やグループの人権に対する特定の影響に特別な注意を払い、可能な場合は過去の差別の是正に貢献すべきです。",
+                detailed: "脆弱なグループのメンバーの権利に対する意識を高めることを促進すべきです。可能であれば、過去の差別の是正に貢献すべきです（例：歴史的に差別されたグループ出身の人々が運営する組織との取引、教育やインフラへのアクセス支援）。特に女性と少女、障害者、子供、先住民族、移民、移民労働者とその家族、出自に基づく差別を受ける人々、人種に基づく差別を受ける人々、その他の脆弱なグループに配慮すべきです。",
+                background: "脆弱なグループは、より人権侵害のリスクに晒されやすいため、企業は彼らの権利を特別に保護し、尊重する責任があります。これにより、企業はより公正で包摂的な社会の実現に貢献できます。",
+                references: [
+                    "ISO26000: 32, 33, 34, 35, 36, 37",
+                    "ビジネスと人権: 17, 27",
+                    "OECDガイドライン: 15, 28, 29",
+                    "ISO20400: 7",
+                    "CSDDD: 37, 39"
+                ]
+            },
+            {
+                subTheme: "18. 市民的および政治的権利の尊重",
+                brief: "企業は、すべての個人の市民的および政治的権利を尊重すべきです。",
+                detailed: "企業は、個人の生命、意見と表現の自由（組織への批判を含む）、平和的集会と結社の自由、情報を求める自由、財産権、適正な法的手続きと公平な聴聞の権利などを尊重すべきです。懲戒処分は比例的であり、身体的な罰や非人道的な扱いを含まないようにすべきです。サプライヤーと協力して、財やサービスの生産のためにサプライチェーンに関与するステークホルダーの市民的および政治的権利を尊重すべきです。",
+                background: "市民的および政治的権利は、個人の自由と尊厳の基礎をなすものです。企業がこれらの権利を尊重することは、基本的な人権を保護し、民主的社会の健全な機能に貢献するために不可欠です。",
+                references: [
+                    "ISO26000: 10, 38",
+                    "ISO20400: 7"
+                ]
+            },
+            {
+                subTheme: "19. 経済的、社会的、文化的権利の尊重",
+                brief: "企業は、意思決定、活動、製品、サービス、および新規プロジェクトが経済的、社会的、文化的権利に及ぼす潜在的な影響を評価し、これらの権利の実現に貢献すべきです。",
+                detailed: "企業は、水などの必須の製品や資源へのアクセスを直接的または間接的に制限したり、否定したりしないようにすべきです。必要に応じて、必須の商品やサービスの効率的な供給を確保するための特定の方針を採用または維持することを検討すべきです。可能であれば、地域社会のメンバーへの教育と生涯学習のアクセスを促進し、支援・施設を提供することで、これらの権利の実現に貢献すべきです。",
+                background: "経済的、社会的、文化的権利は、個人が尊厳ある生活を送り、社会に完全に統合されるための基盤となります。企業は、その事業活動を通じてこれらの権利の実現に積極的に貢献する責任を負います。",
+                references: [
+                    "ISO26000: 11, 39, 40, 41",
+                    "ISO20400: 8"
+                ]
+            },
+            {
+                subTheme: "20. 労働における基本的原則と権利の確保と尊重",
+                brief: "企業は、国際労働機関（ILO）が特定した労働における基本的権利（結社の自由と団体交渉、強制労働の禁止、児童労働の禁止、雇用と職業における差別の撤廃）を確保し、サプライチェーン全体で尊重すべきです。",
+                detailed: "結社の自由と団体交渉では、労働者と雇用者が自由に組織を結成し、加入する権利を尊重すべきです。強制労働の禁止では、強制労働または義務的労働に従事したり、それから利益を得たりしてはなりません。機会均等と非差別では、雇用方針が人種、肌の色、性別、宗教、国籍、社会的出身、政治的意見、年齢、障害に基づく差別がないことを確認すべきです。児童労働の禁止では、児童労働に従事したり、それから利益を得たりしてはなりません。",
+                background: "これらの権利は、労働者の尊厳と福祉を保護し、公正な労働慣行を促進するための国際的な基準です。企業がこれらを尊重することで、サプライチェーン全体の労働条件の改善と持続可能な発展に貢献できます。",
+                references: [
+                    "ISO26000: 12, 42, 43, 44, 45, 46, 47, 48",
+                    "ISO20400: 9"
+                ]
+            },
+            {
+                subTheme: "21. 気候変動緩和計画の採択と実施",
+                brief: "企業は、事業モデルと戦略が持続可能な経済への移行およびパリ協定に沿った地球温暖化1.5℃抑制の目標と整合していることを保証するため、気候変動緩和計画を採択し、実行しなければなりません。",
+                detailed: "この計画は、2030年まで、およびその後2050年までの5年ごとの気候変動関連の時限目標（確実な科学的根拠に基づく、スコープ1, 2, 3の温室効果ガス排出量の絶対削減目標を含む）を含むべきです。目標達成のための脱炭素化の手段と主要な行動の記述、計画実施を支援する投資と資金調達の説明と定量化、計画に関する経営、管理、監督機関の役割の記述も含むべきです。この計画は12ヶ月ごとに更新され、目標達成に向けた進捗状況を記述する必要があります。",
+                background: "パリ協定やEUの気候中立目標（2050年までの気候中立達成、2030年までに排出量を55%削減）といった国際的・EUの気候変動コミットメント達成のために、企業の生産・調達方法の変更が不可欠であり、企業の投資戦略やコーポレートガバナンスも重要であると認識されています。",
+                references: [
+                    "CSDDD: 55, 56, 64, 65, 80, 106(c), 216, 217(a), 217(b), 218(c), 218(d)"
+                ]
+            }
+        ];
+
+        // 現在のタブ
+        let currentTab = 'abstract';
+
+        // タブ切り替え機能
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.add('hidden'));
+            
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            
+            currentTab = tabName;
+            
+            if (tabName === 'abstract') {
+                renderAbstractQuestions();
+            } else if (tabName === 'specific') {
+                renderSpecificQuestions();
+            }
+        }
+
+        // フィルターオプションの切り替え
+        function toggleFilter(filterId) {
+            const checkbox = document.getElementById(filterId);
+            const option = document.querySelector(`[onclick="toggleFilter('${filterId}')"]`);
+            
+            checkbox.checked = !checkbox.checked;
+            option.classList.toggle('active', checkbox.checked);
+            
+            if (currentTab === 'specific') {
+                renderSpecificQuestions();
+            }
+        }
+
+        // 抽象度が高い質問群の表示
+        function renderAbstractQuestions() {
+            const container = document.getElementById('abstract-questions');
+            container.innerHTML = '';
+            
+            abstractQuestions.forEach(question => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-group';
+                
+                const relatedSpecificQuestions = specificQuestions.filter(sq => sq.parentTheme === question.theme);
+                
+                questionDiv.innerHTML = `
+                    <h3>${question.theme}</h3>
+                    <div class="question">
+                        <div class="question-text">${question.question}</div>
+                        <div class="answer-options">
+                            <h5>回答選択肢:</h5>
+                            <ol>
+                                ${question.options.map(option => `<li>${option}</li>`).join('')}
+                            </ol>
+                        </div>
+                        ${relatedSpecificQuestions.length > 0 ? `
+                            <div class="related-questions">
+                                <h5>関連する具体的な質問 (${relatedSpecificQuestions.length}件):</h5>
+                                ${relatedSpecificQuestions.map(rq => `
+                                    <div class="related-question">
+                                        <h6>${rq.subTheme}</h6>
+                                        <p>${rq.question}</p>
+                                        <div class="tags">
+                                            ${rq.standards.iso26000 ? '<span class="tag iso26000">ISO26000</span>' : ''}
+                                            ${rq.standards.iso20400 ? '<span class="tag iso20400">ISO20400</span>' : ''}
+                                            ${rq.standards.oecd ? '<span class="tag oecd">OECD</span>' : ''}
+                                            ${rq.standards.businessHumanRights ? '<span class="tag business-human-rights">ビジネスと人権</span>' : ''}
+                                            ${rq.standards.csddd ? '<span class="tag csddd">CSDDD</span>' : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        // 具体度が高い質問群の表示
+        function renderSpecificQuestions() {
+            const container = document.getElementById('specific-questions');
+            const resultsCount = document.getElementById('results-count');
+            
+            const filteredQuestions = getFilteredQuestions();
+            
+            resultsCount.textContent = `${filteredQuestions.length}件の質問が見つかりました`;
+            
+            container.innerHTML = '';
+            
+            // 子テーマごとにグループ化
+            const groupedQuestions = {};
+            filteredQuestions.forEach(question => {
+                if (!groupedQuestions[question.subTheme]) {
+                    groupedQuestions[question.subTheme] = [];
+                }
+                groupedQuestions[question.subTheme].push(question);
+            });
+            
+            Object.keys(groupedQuestions).forEach(subTheme => {
+                const themeDiv = document.createElement('div');
+                themeDiv.className = 'question-group';
+                
+                const explanation = explanations.find(exp => exp.subTheme === subTheme);
+                const questionsInTheme = groupedQuestions[subTheme];
+                
+                themeDiv.innerHTML = `
+                    <h3>${subTheme}</h3>
+                    ${explanation ? `
+                        <div class="explanation">
+                            <h4>テーマの説明</h4>
+                            <div class="explanation-section">
+                                <h5>企業がすべきこと（簡潔）</h5>
+                                <p>${explanation.brief}</p>
+                            </div>
+                            <div class="explanation-section">
+                                <h5>詳細な説明</h5>
+                                <p>${explanation.detailed}</p>
+                            </div>
+                            <div class="explanation-section">
+                                <h5>背景</h5>
+                                <p>${explanation.background}</p>
+                            </div>
+                            <div class="references">
+                                <h5>参考文書:</h5>
+                                <ul>
+                                    ${explanation.references.map(ref => `<li>${ref}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${questionsInTheme.map(question => `
+                        <div class="question">
+                            <div class="question-text">${question.question}</div>
+                            <div class="answer-options">
+                                <h5>回答選択肢:</h5>
+                                <ol>
+                                    ${question.options.map(option => `<li>${option}</li>`).join('')}
+                                </ol>
+                            </div>
+                            <div class="tags">
+                                ${question.standards.iso26000 ? '<span class="tag iso26000">ISO26000</span>' : ''}
+                                ${question.standards.iso20400 ? '<span class="tag iso20400">ISO20400</span>' : ''}
+                                ${question.standards.oecd ? '<span class="tag oecd">OECD</span>' : ''}
+                                ${question.standards.businessHumanRights ? '<span class="tag business-human-rights">ビジネスと人権</span>' : ''}
+                                ${question.standards.csddd ? '<span class="tag csddd">CSDDD</span>' : ''}
+                            </div>
+                            <p><strong>親テーマ:</strong> <a href="#" class="parent-theme-link" onclick="switchToParentTheme('${question.parentTheme}')">${question.parentTheme}</a></p>
+                        </div>
+                    `).join('')}
+                `;
+                
+                container.appendChild(themeDiv);
+            });
+        }
+
+        // フィルタリングされた質問を取得
+        function getFilteredQuestions() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const iso26000 = document.getElementById('iso26000').checked;
+            const iso20400 = document.getElementById('iso20400').checked;
+            const oecd = document.getElementById('oecd').checked;
+            const businessHumanRights = document.getElementById('business-human-rights').checked;
+            const csddd = document.getElementById('csddd').checked;
+            
+            return specificQuestions.filter(question => {
+                // 検索フィルター
+                const matchesSearch = !searchTerm || 
+                    question.question.toLowerCase().includes(searchTerm) ||
+                    question.subTheme.toLowerCase().includes(searchTerm) ||
+                    question.parentTheme.toLowerCase().includes(searchTerm);
+                
+                // 標準フィルター
+                const matchesStandards = (iso26000 && question.standards.iso26000) ||
+                                       (iso20400 && question.standards.iso20400) ||
+                                       (oecd && question.standards.oecd) ||
+                                       (businessHumanRights && question.standards.businessHumanRights) ||
+                                       (csddd && question.standards.csddd);
+                
+                return matchesSearch && matchesStandards;
+            });
+        }
+
+        // 親テーマに切り替え
+        function switchToParentTheme(parentTheme) {
+            switchTab('abstract');
+            setTimeout(() => {
+                const element = document.querySelector(`h3:contains('${parentTheme}')`);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+
+        // イベントリスナー
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAbstractQuestions();
+            
+            // 検索のイベントリスナー
+            document.getElementById('search-input').addEventListener('input', function() {
+                if (currentTab === 'specific') {
+                    renderSpecificQuestions();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
